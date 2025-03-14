@@ -1,24 +1,24 @@
 #include "led.h"
 #include "time.h"
-
-extern "C"
-{
 #include "wifi_scan.h"
-}
-
 #include "esp_log.h"
 
 extern "C" void app_main()
 {
+    Led powerLed(GPIO_NUM_8);
     hardware_init();
     wifi_init();
-    uint16_t ap_count;
-    while (1)
+
+    while (true)
     {
-        wifi_ap_record_t *records = wifi_scan_start(&ap_count);
-        for (int i = 0; i < ap_count; i++)
-            ESP_LOGI("TAG", "SSID: %s, RSSI: %d", records[i].ssid, records[i].rssi);
-        free(records);
+        std::vector<wifi_ap_record_t> ap_records = wifi_scan_start();
+        ESP_LOGI("WIFI NETWORKS COUNT", "%d", ap_records.size());
+
+        for (const wifi_ap_record_t &ap_record : ap_records)
+            ESP_LOGI("WIFI PARAMS", "SSID: %s, RSSI: %d", ap_record.ssid, ap_record.rssi);
+
+        powerLed.set(1);
         delay_seconds(5);
+        powerLed.set(0);
     }
 }

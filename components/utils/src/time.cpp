@@ -1,5 +1,8 @@
 #include "time.h"
 
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+
 void delay_millis(unsigned long long millis) {
     vTaskDelay(pdMS_TO_TICKS(millis));
 }

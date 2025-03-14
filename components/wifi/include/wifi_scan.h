@@ -1,9 +1,13 @@
 #ifndef WIFI_SCAN_H
 #define WIFI_SCAN_H
 
-#include "esp_err.h"
+#include "esp_wifi.h"
+#include "nvs_flash.h"
 
-esp_err_t wifi_scan_init(void);
-esp_err_t wifi_scan_start(void);
+void hardware_init();
+
+void wifi_init();
+
+wifi_ap_record_t *wifi_scan_start(uint16_t *);
 
 #endif
